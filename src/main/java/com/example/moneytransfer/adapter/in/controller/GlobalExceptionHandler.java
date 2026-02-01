@@ -1,0 +1,85 @@
+package com.example.moneytransfer.adapter.in.controller;
+
+import com.example.moneytransfer.adapter.in.controller.error.ApiErrorResponse;
+import com.example.moneytransfer.adapter.in.controller.error.ErrorCode;
+import com.example.moneytransfer.application.exception.InvalidTransferException;
+import com.example.moneytransfer.application.exception.TransferNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(TransferNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleNotFound(TransferNotFoundException ex) {
+        return build(
+                HttpStatus.NOT_FOUND,
+                ErrorCode.TRANSFER_NOT_FOUND,
+                ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(InvalidTransferException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidTransfer(InvalidTransferException ex) {
+        return build(
+                HttpStatus.BAD_REQUEST,
+                ErrorCode.INVALID_TRANSFER,
+                ex.getMessage()
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> handleGeneric(Exception ex) {
+        return build(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                ErrorCode.INTERNAL_ERROR,
+                "Unexpected error"
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleValidation(
+            MethodArgumentNotValidException ex
+    ) {
+        String details = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(this::formatFieldError)
+                .collect(Collectors.joining("; "));
+
+        String message = details.isBlank() ? "Request validation failed" : details;
+
+        return build(
+                HttpStatus.BAD_REQUEST,
+                ErrorCode.VALIDATION_ERROR,
+                message
+        );
+    }
+
+    private ResponseEntity<ApiErrorResponse> build(
+            HttpStatus status,
+            ErrorCode code,
+            String message
+    ) {
+        return ResponseEntity
+                .status(status)
+                .body(
+                        new ApiErrorResponse(
+                                status.value(),
+                                status.getReasonPhrase(),
+                                code,
+                                message
+                        )
+                );
+    }
+
+    private String formatFieldError(FieldError fieldError) {
+        return String.format("%s: %s", fieldError.getField(), fieldError.getDefaultMessage());
+    }
+}
