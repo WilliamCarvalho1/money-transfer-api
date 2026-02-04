@@ -80,7 +80,7 @@ class TransferControllerTest {
         mockMvc.perform(post("/api/v1/transfer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.sourceAccount").value("acc1"))
                 .andExpect(jsonPath("$.destinationAccount").value("acc2"))

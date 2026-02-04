@@ -41,13 +41,16 @@ public class TransferController {
     @PostMapping
     public ResponseEntity<TransferResponseDTO> createTransfer(@Valid @RequestBody TransferRequestDTO request) {
         Transfer entity = TransferWebMapper.toDomain(request);
+        Transfer created = createTransferUseCase.createTransfer(entity);
+        TransferResponseDTO response = TransferWebMapper.toResponseDTO(created);
 
-        return ResponseEntity.ok(TransferWebMapper.toResponseDTO(createTransferUseCase.createTransfer(entity)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TransferResponseDTO> getTransfer(@PathVariable @NotNull Long id) {
-        return ResponseEntity.ok(TransferWebMapper.toResponseDTO(getTransferUseCase.getTransfer(id)));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(TransferWebMapper.toResponseDTO(getTransferUseCase.getTransfer(id)));
     }
 
     @PutMapping("/{id}")
@@ -55,7 +58,8 @@ public class TransferController {
                                                               @Valid @RequestBody TransferUpdateRequestDTO request) {
         TransferUpdate entity = TransferUpdateWebMapper.toDomain(request);
 
-        return ResponseEntity.ok(TransferWebMapper.toResponseDTO(updateTransferUseCase.updateTransfer(id, entity)));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(TransferWebMapper.toResponseDTO(updateTransferUseCase.updateTransfer(id, entity)));
     }
 
     @DeleteMapping("/{id}")
