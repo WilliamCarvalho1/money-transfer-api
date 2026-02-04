@@ -161,12 +161,12 @@ class TransferControllerTest {
     }
 
     @Test
-    @DisplayName("deleteTransfer should invoke use case and return OK")
+    @DisplayName("deleteTransfer should invoke use case and return NO_CONTENT")
     void deleteTransfer_shouldInvokeUseCaseAndReturnOk() throws Exception {
         Long id = 4L;
 
         mockMvc.perform(delete("/api/v1/transfer/{id}", id))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         verify(deleteTransferUseCase).deleteTransfer(id);
     }
