@@ -23,6 +23,8 @@ class TransferServiceTest {
     private final TransferRepositoryPort repository = mock(TransferRepositoryPort.class);
     private final TransferService service = new TransferService(repository, new FeeCalculatorService());
 
+    public static final String TRANSFER_NOT_FOUND_WITH_NULL_ID = "Transfer not found with id null";
+
     @Test
     @DisplayName("createTransfer should calculate fee and save transfer")
     void createTransfer_happyPath() {
@@ -54,12 +56,12 @@ class TransferServiceTest {
     }
 
     @Test
-    @DisplayName("getTransfer should throw InvalidTransferException when id is null")
-    void getTransfer_nullId_throwsInvalidTransferException() {
-        InvalidTransferException ex = assertThrows(InvalidTransferException.class,
+    @DisplayName("getTransfer should throw TransferNotFoundException when id is null")
+    void getTransfer_nullId_throwsTransferNotFoundException() {
+        TransferNotFoundException ex = assertThrows(TransferNotFoundException.class,
                 () -> service.getTransfer(null));
 
-        assertEquals("ID must not be null.", ex.getMessage());
+        assertEquals(TRANSFER_NOT_FOUND_WITH_NULL_ID, ex.getMessage());
     }
 
     @Test
@@ -107,14 +109,14 @@ class TransferServiceTest {
     }
 
     @Test
-    @DisplayName("updateTransfer should throw InvalidTransferException when id is null")
-    void updateTransfer_nullId_throwsInvalidTransferException() {
+    @DisplayName("updateTransfer should throw TransferNotFoundException when id is null")
+    void updateTransfer_nullId_throwsTransferNotFoundException() {
         TransferUpdate update = new TransferUpdate(BigDecimal.TEN, LocalDate.now());
 
-        InvalidTransferException ex = assertThrows(InvalidTransferException.class,
+        TransferNotFoundException ex = assertThrows(TransferNotFoundException.class,
                 () -> service.updateTransfer(null, update));
 
-        assertEquals("ID must not be null.", ex.getMessage());
+        assertEquals(TRANSFER_NOT_FOUND_WITH_NULL_ID, ex.getMessage());
     }
 
     @Test
@@ -156,12 +158,12 @@ class TransferServiceTest {
     }
 
     @Test
-    @DisplayName("deleteTransfer should throw InvalidTransferException when id is null")
-    void deleteTransfer_nullId_throwsInvalidTransferException() {
-        InvalidTransferException ex = assertThrows(InvalidTransferException.class,
+    @DisplayName("deleteTransfer should throw TransferNotFoundException when id is null")
+    void deleteTransfer_nullId_throwsTransferNotFoundException() {
+        TransferNotFoundException ex = assertThrows(TransferNotFoundException.class,
                 () -> service.deleteTransfer(null));
 
-        assertEquals("ID must not be null.", ex.getMessage());
+        assertEquals(TRANSFER_NOT_FOUND_WITH_NULL_ID, ex.getMessage());
     }
 
     @Test

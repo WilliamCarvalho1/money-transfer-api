@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.stream.Collectors;
 
@@ -32,6 +33,18 @@ public class GlobalExceptionHandler {
                 ErrorCode.INVALID_TRANSFER,
                 ex.getMessage()
         );
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleNoHandlerFound(NoHandlerFoundException ex) {
+        if (ex.getRequestURL().startsWith("/api/v1/transfer/")) {
+            return build(
+                    HttpStatus.BAD_REQUEST,
+                    ErrorCode.INVALID_TRANSFER,
+                    "ID must not be null."
+            );
+        }
+        return build(HttpStatus.NOT_FOUND, ErrorCode.TRANSFER_NOT_FOUND, "Resource not found.");
     }
 
     @ExceptionHandler(Exception.class)

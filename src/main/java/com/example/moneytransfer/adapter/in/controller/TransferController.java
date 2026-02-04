@@ -12,6 +12,7 @@ import com.example.moneytransfer.application.port.in.UpdateTransferUseCase;
 import com.example.moneytransfer.domain.model.Transfer;
 import com.example.moneytransfer.domain.model.TransferUpdate;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,12 +46,12 @@ public class TransferController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TransferResponseDTO> getTransfer(@PathVariable Long id) {
+    public ResponseEntity<TransferResponseDTO> getTransfer(@PathVariable @NotNull Long id) {
         return ResponseEntity.ok(TransferWebMapper.toResponseDTO(getTransferUseCase.getTransfer(id)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TransferResponseDTO> updateTransfer(@PathVariable Long id,
+    public ResponseEntity<TransferResponseDTO> updateTransfer(@PathVariable @NotNull Long id,
                                                               @Valid @RequestBody TransferUpdateRequestDTO request) {
         TransferUpdate entity = TransferUpdateWebMapper.toDomain(request);
 
@@ -59,7 +60,7 @@ public class TransferController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable @NotNull Long id) {
         deleteTransferUseCase.deleteTransfer(id);
     }
 }

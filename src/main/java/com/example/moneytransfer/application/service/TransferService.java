@@ -40,10 +40,6 @@ public class TransferService implements CreateTransferUseCase, GetTransferUseCas
 
     @Override
     public Transfer getTransfer(Long id) {
-        if (id == null) {
-            throw new InvalidTransferException("ID must not be null.");
-        }
-
         try {
             Optional<Transfer> retrievedTransfer = repository.findById(id);
             if (retrievedTransfer.isPresent()) {
@@ -58,10 +54,6 @@ public class TransferService implements CreateTransferUseCase, GetTransferUseCas
 
     @Override
     public Transfer updateTransfer(Long id, TransferUpdate request) {
-        if (id == null) {
-            throw new InvalidTransferException("ID must not be null.");
-        }
-
         Transfer retrievedTransfer = getTransfer(id);
 
         try {
@@ -78,10 +70,6 @@ public class TransferService implements CreateTransferUseCase, GetTransferUseCas
 
     @Override
     public void deleteTransfer(Long id) {
-        if (id == null) {
-            throw new InvalidTransferException("ID must not be null.");
-        }
-
         Transfer retrievedTransfer = getTransfer(id);
         repository.deleteById(retrievedTransfer.getId());
     }
