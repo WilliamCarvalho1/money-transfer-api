@@ -21,15 +21,15 @@ public class TransferPersistenceMapper {
         );
     }
 
-    public static JpaTransferEntity toJpaEntity(Transfer transferEntity) {
+    public static JpaTransferEntity toJpaEntity(Transfer transfer) {
         return new JpaTransferEntity(
-                transferEntity.getId(),
-                transferEntity.getSourceAccount(),
-                transferEntity.getDestinationAccount(),
-                transferEntity.getAmount(),
-                transferEntity.getScheduledDate(),
-                transferEntity.getFee(),
-                transferEntity.getTotalAmount()
+                transfer.getId(),
+                transfer.getSourceAccount(),
+                transfer.getDestinationAccount(),
+                transfer.getAmount(),
+                transfer.getScheduledDate(),
+                transfer.getFee(),
+                transfer.getTotalAmount()
         );
     }
 
