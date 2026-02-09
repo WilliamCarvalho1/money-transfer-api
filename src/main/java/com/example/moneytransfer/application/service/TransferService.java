@@ -51,7 +51,6 @@ public class TransferService implements CreateTransferUseCase, GetTransferUseCas
         throw new TransferNotFoundException(id);
     }
 
-
     @Override
     public Transfer updateTransfer(Long id, TransferUpdate request) {
         Transfer retrievedTransfer = getTransfer(id);

@@ -1,5 +1,6 @@
 package com.example.moneytransfer.domain.shared;
 
+import com.example.moneytransfer.application.exception.InvalidTransferException;
 import com.example.moneytransfer.domain.model.Transfer;
 
 import java.math.BigDecimal;
@@ -33,7 +34,7 @@ public class FeeCalculatorService {
         long days = ChronoUnit.DAYS.between(LocalDate.now(), scheduledDate);
 
         if (days < 0) {
-            throw new IllegalArgumentException("Scheduled date must not be in the past.");
+            throw new InvalidTransferException("Scheduled date must not be in the past.");
         }
         return days;
     }
