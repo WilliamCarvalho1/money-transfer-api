@@ -1,4 +1,4 @@
-package com.example.moneytransfer.domain.shared;
+package com.example.moneytransfer.domain.fee;
 
 public class FeeCalculationException extends RuntimeException {
 

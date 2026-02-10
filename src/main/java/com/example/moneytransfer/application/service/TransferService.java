@@ -7,10 +7,10 @@ import com.example.moneytransfer.application.port.in.DeleteTransferUseCase;
 import com.example.moneytransfer.application.port.in.GetTransferUseCase;
 import com.example.moneytransfer.application.port.in.UpdateTransferUseCase;
 import com.example.moneytransfer.application.port.out.TransferRepositoryPort;
+import com.example.moneytransfer.domain.fee.FeeCalculationException;
+import com.example.moneytransfer.domain.fee.FeeCalculatorService;
 import com.example.moneytransfer.domain.model.Transfer;
 import com.example.moneytransfer.domain.model.TransferUpdate;
-import com.example.moneytransfer.domain.shared.FeeCalculationException;
-import com.example.moneytransfer.domain.shared.FeeCalculatorService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 

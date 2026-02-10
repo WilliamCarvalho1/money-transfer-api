@@ -3,15 +3,17 @@ package com.example.moneytransfer.application.service;
 import com.example.moneytransfer.application.exception.InvalidTransferException;
 import com.example.moneytransfer.application.exception.TransferNotFoundException;
 import com.example.moneytransfer.application.port.out.TransferRepositoryPort;
+import com.example.moneytransfer.domain.fee.FeeCalculatorService;
+import com.example.moneytransfer.domain.fee.strategy.*;
 import com.example.moneytransfer.domain.model.Transfer;
 import com.example.moneytransfer.domain.model.TransferUpdate;
-import com.example.moneytransfer.domain.shared.FeeCalculatorService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataAccessException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,7 +23,16 @@ import static org.mockito.Mockito.*;
 class TransferServiceTest {
 
     private final TransferRepositoryPort repository = mock(TransferRepositoryPort.class);
-    private final TransferService service = new TransferService(repository, new FeeCalculatorService());
+    private final FeeCalculatorService feeCalculatorService = new FeeCalculatorService(
+            List.of(
+                    new UpToOneThousandSameDayStrategy(),
+                    new OneToTwoThousandEarlyStrategy(),
+                    new HighAmount21To30DaysStrategy(),
+                    new HighAmount31To40DaysStrategy(),
+                    new HighAmountOver40DaysStrategy()
+            )
+    );
+    private final TransferService service = new TransferService(repository, feeCalculatorService);
 
     public static final String TRANSFER_NOT_FOUND_WITH_NULL_ID = "Transfer not found with id null";
 
