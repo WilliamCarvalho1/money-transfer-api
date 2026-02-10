@@ -13,7 +13,7 @@ public class FeeCalculatorService {
     private static final BigDecimal ONE_THOUSAND = BigDecimal.valueOf(1000);
     private static final BigDecimal TWO_THOUSAND = BigDecimal.valueOf(2000);
 
-    public void setFeeAndTotalAmount(BigDecimal amount, LocalDate scheduledDate, Transfer transfer) {
+    public void applyFeeAndTotalAmount(BigDecimal amount, LocalDate scheduledDate, Transfer transfer) {
         BigDecimal fee = calculate(amount, scheduledDate);
         transfer.setFee(fee);
         transfer.setTotalAmount(amount.add(fee));

@@ -30,7 +30,7 @@ public class TransferService implements CreateTransferUseCase, GetTransferUseCas
     @Override
     public Transfer createTransfer(Transfer request) {
         try {
-            feeCalculator.setFeeAndTotalAmount(request.getAmount(), request.getScheduledDate(), request);
+            feeCalculator.applyFeeAndTotalAmount(request.getAmount(), request.getScheduledDate(), request);
         } catch (FeeCalculationException ex) {
             throw new InvalidTransferException(ex.getMessage());
         }
@@ -56,7 +56,7 @@ public class TransferService implements CreateTransferUseCase, GetTransferUseCas
         Transfer retrievedTransfer = getTransfer(id);
 
         try {
-            feeCalculator.setFeeAndTotalAmount(request.getAmount(), request.getScheduledDate(), retrievedTransfer);
+            feeCalculator.applyFeeAndTotalAmount(request.getAmount(), request.getScheduledDate(), retrievedTransfer);
         } catch (FeeCalculationException ex) {
             throw new InvalidTransferException(ex.getMessage());
         }

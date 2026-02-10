@@ -72,12 +72,12 @@ class FeeCalculatorServiceTest {
 
     @Test
     @DisplayName("setFeeAndTotalAmount should populate fee and totalAmount on transfer")
-    void setFeeAndTotalAmount_shouldPopulateTransfer() {
+    void applyFeeAndTotalAmount_shouldPopulateTransfer() {
         BigDecimal amount = BigDecimal.valueOf(1000);
         LocalDate today = LocalDate.now();
         Transfer transfer = new Transfer();
 
-        feeCalculatorService.setFeeAndTotalAmount(amount, today, transfer);
+        feeCalculatorService.applyFeeAndTotalAmount(amount, today, transfer);
 
         BigDecimal expectedFee = amount.multiply(BigDecimal.valueOf(0.03))
                 .add(BigDecimal.valueOf(3));
